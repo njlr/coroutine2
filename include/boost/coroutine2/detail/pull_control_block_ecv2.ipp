@@ -69,8 +69,7 @@ pull_coroutine< T >::control_block::control_block( context::preallocated palloc,
                 // set termination flags
                 state |= state_t::complete;
                 // jump back to ctx
-                auto result = other->ctx( nullptr);
-                other->ctx = std::move( std::get< 0 >( result) );
+                other->ctx( nullptr);
                 return std::move( other->ctx);
              },
              std::forward< Fn >( fn),
@@ -98,8 +97,7 @@ pull_coroutine< T >::control_block::control_block( context::preallocated palloc,
             // set termination flags
             state |= state_t::complete;
             // jump back to ctx
-            auto result = other->ctx( nullptr);
-            other->ctx = std::move( std::get< 0 >( result) );
+            other->ctx( nullptr);
             return std::move( other->ctx);
          }},
 #endif
@@ -142,9 +140,7 @@ pull_coroutine< T >::control_block::deallocate() noexcept {
 template< typename T >
 void
 pull_coroutine< T >::control_block::resume() {
-    auto result = ctx( nullptr);
-    ctx = std::move( std::get< 0 >( result) );
-    set( std::get< 1 >( result) );
+    set( ctx( nullptr) );
     if ( except) {
         std::rethrow_exception( except);
     }
@@ -219,8 +215,7 @@ pull_coroutine< T & >::control_block::control_block( context::preallocated pallo
                 // set termination flags
                 state |= state_t::complete;
                 // jump back to ctx
-                auto result = other->ctx( nullptr);
-                other->ctx = std::move( std::get< 0 >( result) );
+                other->ctx( nullptr);
                 return std::move( other->ctx);
              },
              std::forward< Fn >( fn),
@@ -248,8 +243,7 @@ pull_coroutine< T & >::control_block::control_block( context::preallocated pallo
             // set termination flags
             state |= state_t::complete;
             // jump back to ctx
-            auto result = other->ctx( nullptr);
-            other->ctx = std::move( std::get< 0 >( result) );
+            other->ctx( nullptr);
             return std::move( other->ctx);
          }},
 #endif
@@ -282,9 +276,7 @@ pull_coroutine< T & >::control_block::deallocate() noexcept {
 template< typename T >
 void
 pull_coroutine< T & >::control_block::resume() {
-    auto result = ctx( nullptr);
-    ctx = std::move( std::get< 0 >( result) );
-    t = std::get< 1 >( result);
+    t = ctx( nullptr);
     if ( except) {
         std::rethrow_exception( except);
     }
@@ -343,7 +335,7 @@ pull_coroutine< void >::control_block::control_block( context::preallocated pall
                 // set termination flags
                 state |= state_t::complete;
                 // jump back to ctx
-                other->ctx = other->ctx();
+                other->ctx();
                 return std::move( other->ctx);
              },
              std::forward< Fn >( fn),
@@ -370,7 +362,7 @@ pull_coroutine< void >::control_block::control_block( context::preallocated pall
             // set termination flags
             state |= state_t::complete;
             // jump back to ctx
-            other->ctx = other->ctx();
+            other->ctx();
             return std::move( other->ctx);
          }},
 #endif
@@ -401,7 +393,7 @@ pull_coroutine< void >::control_block::deallocate() noexcept {
 inline
 void
 pull_coroutine< void >::control_block::resume() {
-    ctx = ctx();
+    ctx();
     if ( except) {
         std::rethrow_exception( except);
     }

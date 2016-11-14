@@ -70,8 +70,7 @@ push_coroutine< T >::control_block::control_block( context::preallocated palloc,
                 // set termination flags
                 state |= state_t::complete;
                 // jump back to ctx
-                auto result = other->ctx( nullptr);
-                other->ctx = std::move( std::get< 0 >( result) );
+                other->ctx( nullptr);
                 return std::move( other->ctx);
              },
              std::forward< Fn >( fn),
@@ -101,8 +100,7 @@ push_coroutine< T >::control_block::control_block( context::preallocated palloc,
             // set termination flags
             state |= state_t::complete;
             // jump back to ctx
-            auto result = other->ctx( nullptr);
-            other->ctx = std::move( std::get< 0 >( result) );
+            other->ctx( nullptr);
             return std::move( other->ctx);
          }},
 #endif
@@ -132,8 +130,7 @@ template< typename T >
 void
 push_coroutine< T >::control_block::resume( T const& data) {
     // pass an pointer to other context
-    auto result = ctx( const_cast< T * >( & data) );
-    ctx = std::move( std::get< 0 >( result) );
+    ctx( const_cast< T * >( & data) );
     if ( except) {
         std::rethrow_exception( except);
     }
@@ -143,8 +140,7 @@ template< typename T >
 void
 push_coroutine< T >::control_block::resume( T && data) {
     // pass an pointer to other context
-    auto result = ctx( std::addressof( data) );
-    ctx = std::move( std::get< 0 >( result) );
+    ctx( std::addressof( data) );
     if ( except) {
         std::rethrow_exception( except);
     }
@@ -200,8 +196,7 @@ push_coroutine< T & >::control_block::control_block( context::preallocated pallo
                 // set termination flags
                 state |= state_t::complete;
                 // jump back to ctx
-                auto result = other->ctx( nullptr);
-                other->ctx = std::move( std::get< 0 >( result) );
+                other->ctx( nullptr);
                 return std::move( other->ctx);
              },
              std::forward< Fn >( fn),
@@ -231,8 +226,7 @@ push_coroutine< T & >::control_block::control_block( context::preallocated pallo
             // set termination flags
             state |= state_t::complete;
             // jump back to ctx
-            auto result = other->ctx( nullptr);
-            other->ctx = std::move( std::get< 0 >( result) );
+            other->ctx( nullptr);
             return std::move( other->ctx);
          }},
 #endif
@@ -262,8 +256,7 @@ template< typename T >
 void
 push_coroutine< T & >::control_block::resume( T & t) {
     // pass an pointer to other context
-    auto result = ctx( const_cast< typename std::remove_const< T >::type * >( std::addressof( t) ) );
-    ctx = std::move( std::get< 0 >( result) );
+    ctx( const_cast< typename std::remove_const< T >::type * >( std::addressof( t) ) );
     if ( except) {
         std::rethrow_exception( except);
     }
@@ -315,7 +308,7 @@ push_coroutine< void >::control_block::control_block( context::preallocated pall
                 // set termination flags
                 state |= state_t::complete;
                 // jump back to ctx
-                other->ctx = other->ctx();
+                other->ctx();
                 return std::move( other->ctx);
              },
              std::forward< Fn >( fn),
@@ -342,7 +335,7 @@ push_coroutine< void >::control_block::control_block( context::preallocated pall
             // set termination flags
             state |= state_t::complete;
             // jump back to ctx
-            other->ctx = other->ctx();
+            other->ctx();
             return std::move( other->ctx);
          }},
 #endif
@@ -371,7 +364,7 @@ push_coroutine< void >::control_block::deallocate() noexcept {
 inline
 void
 push_coroutine< void >::control_block::resume() {
-    ctx = ctx();
+    ctx();
     if ( except) {
         std::rethrow_exception( except);
     }
