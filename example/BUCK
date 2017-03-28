@@ -1,0 +1,16 @@
+cxx_binary(
+  name = 'fibonacci',
+  srcs = [
+    'fibonacci.cpp',
+  ],
+  compiler_flags = [
+    '-std=c++14',
+    '-fsplit-stack',
+    '-fomit-frame-pointer',
+    '-DDBOOST_USE_SEGMENTED_STACKS',
+    '-DBOOST_COROUTINES2_DYN_LINK=1',
+  ],
+  deps = [
+    '//:coroutine2',
+  ],
+)
